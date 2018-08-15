@@ -1,0 +1,25 @@
+//выведите список стажёров (trainee name, trainee email, course name, history end)
+//которые успешно прошли курс PHP (course name=PHP) в прошлом месяце
+//(сравнить history end)
+
+SELECT Trainee.name, Trainee.email, Course.name, History.end 
+FROM `History`, `Trainee`, `Course` 
+WHERE Course.name='PHP' 
+AND Course.course_id = History.course_id 
+AND Trainee.trainee_id = History.trainee_id 
+AND History.end > YEAR(CURRENT_DATE)*10000+(MONTH(CURRENT_DATE)-1)*100
+AND History.end < YEAR(CURRENT_DATE)*10000+(MONTH(CURRENT_DATE))*100
+AND History.status = 1
+
+
+//для каждого из всех возможных курсов выведите количество успешных
+//прохождений (course name, quantity) в текущем месяце (сравнить history start)
+
+//Формат History.start: 20180814
+
+SELECT Course.name, COUNT(History.history_id) As summ
+FROM History, Course
+WHERE Course.course_id = History.course_id
+AND History.status = 1
+AND History.start > YEAR(CURRENT_DATE)*10000+MONTH(CURRENT_DATE)*100
+GROUP BY Course.name
